@@ -138,18 +138,31 @@ void loop() {
     // prompt
     tft.setTextSize(1);
     tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
-    tft.println("Push Below To Toggle:");
+    tft.println("Push Anywhere To Toggle:");
     
     // spacing
-    // tft.setTextSize(1);
-    // tft.println();
+    tft.setTextSize(1);
+    tft.println();
+    
+    // debug
+    // tft.println(readTouchX());
+    // tft.println(readTouchY());
+    tft.println(pressure());
+    
+    // read touch
+    if(pressure() > 63000){
+        tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
+        tft.println("pressed");
+    } else {
+        tft.setTextColor(ILI9341_RED, ILI9341_BLACK);
+        tft.println("idle   ");
+    }
 }
-
 
 ///////////////////
 // GARAGE TOGGLE //
 ///////////////////
-int garage(String command){
+int garage(String command) {
     if(command == "push"){
         // updating cloud things
         if(state == "open"){
@@ -169,4 +182,68 @@ int garage(String command){
     }
     // failure
     return 0;
+}
+
+///////////////////////////
+// TOUCH SCREEN READINGS //
+//////////////////////////
+
+// get x location of touch
+int readTouchX(void) {
+    // y pins low
+    pinMode(yp, INPUT);
+    pinMode(ym, INPUT);
+    digitalWrite(yp, LOW);
+    digitalWrite(ym, LOW);
+    
+    // x pins read
+    pinMode(xp, OUTPUT);
+    digitalWrite(xp, HIGH);
+    pinMode(xm, OUTPUT);
+    digitalWrite(xm, LOW);
+    
+    // return reading
+    return (1023 - analogRead(yp));
+}
+
+// get y location of touch
+int readTouchY(void){
+    // x pins low
+    pinMode(xm, INPUT);
+    pinMode(xp, INPUT);
+    digitalWrite(xp, LOW);
+    digitalWrite(xm, LOW);
+    
+    // y pins read
+    pinMode(yp, OUTPUT);
+    digitalWrite(yp, HIGH);
+    pinMode(ym, OUTPUT);
+    digitalWrite(ym, LOW);
+    
+    // return reading
+    return (1023 - analogRead(xm));
+}
+
+// get touch pressure
+uint16_t pressure(void) {
+    // x+ gnd
+    pinMode(xp, OUTPUT);
+    digitalWrite(xp, LOW);
+    
+    // y- vcc
+    pinMode(ym, OUTPUT);
+    digitalWrite(ym, HIGH);
+    
+    // x-, y+ read
+    digitalWrite(xm, LOW);
+    pinMode(xm, INPUT);
+    digitalWrite(yp, LOW);
+    pinMode(yp, INPUT);
+    
+    // pressures
+    int z1 = analogRead(xm);
+    int z2 = analogRead(yp);
+    
+    // return reading
+    return (1023 - (z2 - z1));
 }
