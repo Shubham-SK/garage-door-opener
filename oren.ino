@@ -37,6 +37,8 @@ Adafruit_ILI9341 tft = Adafruit_ILI9341(spiChipSelect, spiDigitalCommand, spiRes
 //////////////////////
 String state = "closed";
 int cycles = 0;
+int n = 0;
+bool pushed = false;
 
 ///////////
 // SETUP // 
@@ -129,7 +131,7 @@ void loop() {
     } else {
         tft.setTextColor(ILI9341_RED, ILI9341_BLACK);
     }
-    tft.println("STATUS:"+stateCopy);
+    tft.println("STATUS:"+stateCopy+"   ");
     
     // spacing
     tft.setTextSize(1);
@@ -147,15 +149,22 @@ void loop() {
     // debug
     // tft.println(readTouchX());
     // tft.println(readTouchY());
-    tft.println(pressure());
+    // tft.println("pressue: " pressure());
+    tft.println("cycles: "+String(cycles));
     
     // read touch
-    if(pressure() > 63000){
+    if(pressure() > 63000 and !pushed){
+        pushed = true;
         tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
-        tft.println("pressed");
-    } else {
+        tft.println("pressed | called");
+        garage("push");
+    } else if(pressure() > 63000 and pushed){
+        tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
+        tft.println("pressed         ");
+    } else if(pressure() < 63000 and pushed){
+        pushed = false;
         tft.setTextColor(ILI9341_RED, ILI9341_BLACK);
-        tft.println("idle   ");
+        tft.println("idle            ");
     }
 }
 
