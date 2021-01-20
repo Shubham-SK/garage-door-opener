@@ -20,10 +20,10 @@ int spiChipSelect = D4;
 int spiDigitalCommand = D5;
 
 // touch screen
-int ypos = A2;
-int yneg = D3;
-int xpos = D2;
-int xneg = A1;
+int yp = A2;
+int ym = D3;
+int xp = D2;
+int xm = A1;
 
 ////////////////////
 // GLOBAL OBJECTS //
@@ -56,14 +56,6 @@ void setup() {
     tft.begin();
     tft.setRotation(90);
     tft.fillScreen(ILI9341_BLACK);
-    
-    // screen touch initialization stuff
-    pinMode(xpos, OUTPUT);
-    pinMode(yneg, OUTPUT);
-    digitalWrite(xpos, HIGH);
-    digitalWrite(yneg, HIGH);
-    pinMode(xneg, INPUT);
-    pinMode(ypos, INPUT);
     
     // time stuff
     Time.zone(-8);
@@ -149,9 +141,8 @@ void loop() {
     tft.println("Push Below To Toggle:");
     
     // spacing
-    tft.setTextSize(1);
-    tft.println("x: "+String(analogRead(xneg)));
-    tft.println("y: "+String(analogRead(ypos)));
+    // tft.setTextSize(1);
+    // tft.println();
 }
 
 
@@ -179,4 +170,3 @@ int garage(String command){
     // failure
     return 0;
 }
-
