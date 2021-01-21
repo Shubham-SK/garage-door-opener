@@ -83,6 +83,31 @@ void loop() {
     tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
     tft.setTextSize(2);
     tft.println(dateString);
+
+    // spacing
+    tft.setTextSize(1);
+    tft.println();
+    tft.println();
+    
+    // status
+    tft.setTextSize(2);
+    String stateCopy = state;
+    stateCopy.toUpperCase();
+    if(stateCopy == "OPEN"){
+        tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
+    } else {
+        tft.setTextColor(ILI9341_RED, ILI9341_BLACK);
+    }
+    tft.println("STATUS:"+stateCopy+"   ");
+    
+    // spacing
+    tft.setTextSize(1);
+    tft.println();
+    
+    // prompt
+    tft.setTextSize(1);
+    tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
+    tft.println("Push Anywhere To Toggle:");
     
     // spacing
     tft.setTextSize(1);
@@ -122,34 +147,11 @@ void loop() {
     tft.println();
     tft.println();
     
-    // status
-    tft.setTextSize(2);
-    String stateCopy = state;
-    stateCopy.toUpperCase();
-    if(stateCopy == "OPEN"){
-        tft.setTextColor(ILI9341_GREEN, ILI9341_BLACK);
-    } else {
-        tft.setTextColor(ILI9341_RED, ILI9341_BLACK);
-    }
-    tft.println("STATUS:"+stateCopy+"   ");
-    
-    // spacing
-    tft.setTextSize(1);
-    tft.println();
-    
-    // prompt
-    tft.setTextSize(1);
-    tft.setTextColor(ILI9341_WHITE, ILI9341_BLACK);
-    tft.println("Push Anywhere To Toggle:");
-    
-    // spacing
-    tft.setTextSize(1);
-    tft.println();
-    
     // debug
     // tft.println(readTouchX());
     // tft.println(readTouchY());
     // tft.println("pressue: " pressure());
+    tft.setTextColor(ILI9341_CYAN, ILI9341_BLACK);
     tft.println("cycles: "+String(cycles));
     
     // read touch
